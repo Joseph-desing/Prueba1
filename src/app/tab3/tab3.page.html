@@ -1,17 +1,50 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Tab 3
+      <ion-icon name="document-text-outline"></ion-icon>
+      Recibos
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="container">
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+    
+    <ion-card *ngIf="gastos.length > 0">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="list-outline"></ion-icon>
+          Recibos Registrados
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item *ngFor="let gasto of gastos">
+          <ion-label>
+            <h2>{{ gasto.descripcion }}</h2>
+            <h3>${{ gasto.monto.toFixed(2) }}</h3>
+            <p>{{ gasto.fecha | date: 'dd/MM/yyyy HH:mm' }}</p>
+          </ion-label>
+
+         
+          <ion-button fill="clear" slot="end" (click)="verDetalle(gasto)">
+            <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+
+          <ion-button fill="clear" slot="end" color="success" (click)="descargarRecibo(gasto)">
+            <ion-icon name="download-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="gastos.length === 0">
+      <ion-card-content class="empty-state">
+        <ion-icon name="alert-circle-outline" size="large"></ion-icon>
+        <p>No hay recibos disponibles</p>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
 </ion-content>

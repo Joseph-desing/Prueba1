@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>
+      <ion-icon name="listOutline"></ion-icon>
+      Reporte Mensual
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="calendar"></ion-icon>
+        Seleccionar Fecha
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Mes</ion-label>
+        <ion-select [(ngModel)]="mes" (ionChange)="cambiarFecha()">
+          <ion-select-option *ngFor="let m of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="m">
+            {{ m }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Año</ion-label>
+        <ion-select [(ngModel)]="anio" (ionChange)="cambiarFecha()">
+          <ion-select-option *ngFor="let y of [2023,2024,2025,2026]" [value]="y">
+            {{ y }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="getTotal() > 0">
+    <ion-card-header>
+      <ion-card-title>Resumen de Gastos</ion-card-title>
+      <ion-card-subtitle>Total: ${{ getTotal().toFixed(2) }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item *ngFor="let cat of ['Comida', 'Restaurante', 'Transporte', 'Otros']">
+        <ion-label>{{ cat }}</ion-label>
+        <ion-text>${{ resumen[cat].toFixed(2) }}</ion-text>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="getTotal() === 0">
+    <ion-card-content>
+      <p>No hay gastos registrados para este mes</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -1,7 +1,8 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Tab 1
+      <ion-icon name="receipt-outline"></ion-icon>
+      Inicio
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,9 +10,144 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
+      <ion-title size="large">Registro de Gastos</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <div class="container">
+
+    
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="add-circle-outline"></ion-icon>
+          Nuevo Gasto
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        
+        <ion-item>
+          <ion-label position="floating">Descripción *</ion-label>
+          <ion-input
+            [(ngModel)]="descripcion"
+            placeholder=""
+            type="text"
+          ></ion-input>
+        </ion-item>
+
+        
+        <ion-item>
+          <ion-label position="floating">Monto ($) *</ion-label>
+          <ion-input
+            [(ngModel)]="monto"
+            placeholder=""
+            type="number"
+            min="0"
+            step="0.01"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Categoría *</ion-label>
+          <ion-select [(ngModel)]="categoria">
+            <ion-select-option value="Comida">Comida</ion-select-option>
+            <ion-select-option value="Restaurante">Restaurante</ion-select-option>
+            <ion-select-option value="Transporte">Transporte</ion-select-option>
+            <ion-select-option value="Otros">Otros</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        
+        <ion-item>
+          <ion-label position="floating">Detalle del Recibo *</ion-label>
+          <ion-textarea
+            [(ngModel)]="detalleRecibo"
+            placeholder=""
+            rows="4"
+            [autoGrow]="true"
+          ></ion-textarea>
+        </ion-item>
+
+     
+        <ion-button
+          expand="block"
+          (click)="tomarFoto()"
+          class="ion-margin-top"
+        >
+          <ion-icon slot="start" name="camera"></ion-icon>
+          Tomar Foto del Recibo *
+        </ion-button>
+
+        <div *ngIf="fotoCapturada" class="foto-preview">
+          <ion-text color="success">
+            <h3>
+              <ion-icon name="checkmark-circle"></ion-icon>
+              Foto Capturada
+            </h3>
+          </ion-text>
+          <img [src]="fotoCapturada" alt="Preview del recibo" />
+        </div>
+
+        
+        <ion-button
+          expand="block"
+          color="success"
+          (click)="guardarGasto()"
+          class="ion-margin-top"
+          [disabled]="!descripcion || !monto || !fotoCapturada || !detalleRecibo || !categoria"
+        >
+          <ion-icon slot="start" name="save"></ion-icon>
+          Guardar Gasto
+        </ion-button>
+
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="gastos.length > 0">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="list-outline"></ion-icon>
+          Gastos Registrados
+        </ion-card-title>
+        <ion-card-subtitle>
+          Total: ${{ getTotalGastos().toFixed(2) }}
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content class="gastos-lista">
+        <ion-item *ngFor="let gasto of gastos" lines="full" class="gasto-item">
+          <ion-thumbnail slot="start">
+            <img [src]="gasto.fotoUrl" alt="Recibo" />
+          </ion-thumbnail>
+
+          <ion-label>
+            <h2>{{ gasto.descripcion }}</h2>
+            <h3>${{ gasto.monto.toFixed(2) }}</h3>
+            <p>{{ gasto.fecha | date: 'dd/MM/yyyy HH:mm' }}</p>
+            <p><strong>Categoria:</strong> {{ gasto.categoria }}</p>
+          </ion-label>
+
+          <ion-button slot="end" fill="clear" (click)="verDetalle(gasto)">
+            <ion-icon name="document-text" slot="icon-only"></ion-icon>
+          </ion-button>
+
+          <ion-button slot="end" fill="clear" color="danger" (click)="eliminarGasto(gasto)">
+            <ion-icon name="trash" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    
+    <ion-card *ngIf="gastos.length === 0">
+      <ion-card-content class="empty-state">
+        <ion-icon name="receipt-outline" size="large"></ion-icon>
+        <p>No hay gastos registrados</p>
+        <p>Agregue su primer gasto usando el formulario arriba</p>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
 </ion-content>

@@ -1,0 +1,12 @@
+ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 15px;
+}
+
+ion-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+}
